@@ -83,8 +83,8 @@ class TestrunSession():
   def __init__(self, root_dir):
     self._root_dir = root_dir
 
-    self._status = TestrunStatus.IDLE
-    self._description = None
+    self._status: TestrunStatus = TestrunStatus.IDLE
+    self._description: str = None
 
     # Target test device
     self._device = None
@@ -94,31 +94,31 @@ class TestrunSession():
     self._finished = None
 
     # Current testing results
-    self._results = []
+    self._results: list = []
 
     # All historical reports
-    self._module_reports = []
+    self._module_reports: list = []
 
     # Parameters specified when starting Testrun
-    self._runtime_params = []
+    self._runtime_params: list = []
 
     # All device configurations
-    self._device_repository = []
+    self._device_repository: list = []
 
     # Number of tests to be run this session
-    self._total_tests = 0
+    self._total_tests: int = 0
 
     # Direct url for PDF report
-    self._report_url = None
+    self._report_url: str = None
 
     # Version
     self._load_version()
 
     # Profiles
-    self._profiles = []
+    self._profiles: list = []
 
     # Profile format that is passed to the frontend
-    self._profile_format_json = None
+    self._profile_format_json: dict = None
 
     # Profile format used for internal validation
     self._profile_format = None
@@ -141,7 +141,8 @@ class TestrunSession():
     # Store host user for permissions use
     self._host_user = util.get_host_user()
 
-    self._certs = []
+    # Root CA certificates
+    self._certs: list = []
     self.load_certs()
 
     # Fetch the timezone of the host system
@@ -154,26 +155,33 @@ class TestrunSession():
     self._mqtt_client = mqtt.MQTT()
 
   def start(self):
+    """Start the current Testrun session"""
     self.reset()
     self._status = TestrunStatus.WAITING_FOR_DEVICE
     self._started = datetime.datetime.now()
 
   def get_started(self):
+    """Get the datetime that the current session was started"""
     return self._started
 
   def get_finished(self):
+    """Get the datetime that the current session was finished"""
     return self._finished
 
   def stop(self):
+    """Stop the current Testrun session"""
     self.set_status(TestrunStatus.STOPPING)
     self.finish()
 
   def finish(self):
+    """Update any required data now that the session is finishing"""
+
     # Set any in progress test results to Error
     for test_result in self._results:
       if test_result.result == TestResult.IN_PROGRESS:
         test_result.result = TestResult.ERROR
 
+    # Set the finished datetime
     self._finished = datetime.datetime.now()
 
   def _get_default_config(self):
@@ -184,7 +192,7 @@ class TestrunSession():
         },
         'log_level': 'INFO',
         'startup_timeout': 60,
-        'monitor_period': 30,
+        'monitor_period': 300,
         'max_device_reports': 0,
         'api_url': 'http://localhost',
         'api_port': 8000,
@@ -193,6 +201,7 @@ class TestrunSession():
     }
 
   def get_config(self):
+    """Return the config from memory"""
     return self._config
 
   def _load_config(self):
@@ -282,9 +291,11 @@ class TestrunSession():
         self._version = 'Unknown'
 
   def get_host_user(self):
+    """Get the username of the host OS user"""
     return self._host_user
 
   def get_version(self):
+    """Return the installed Testrun version"""
     return self._version
 
   def _save_config(self):
@@ -293,33 +304,37 @@ class TestrunSession():
     util.set_file_owner(owner=util.get_host_user(), path=self._config_file)
 
   def get_log_level(self):
+    """Get the configured logging level"""
     return self._config.get(LOG_LEVEL_KEY)
 
   def get_runtime_params(self):
+    """Get user provided runtime parameters"""
     return self._runtime_params
 
   def add_runtime_param(self, param):
+    """Add a runtime parameter to the session"""
     if param == 'single_intf':
       self._config['single_intf'] = True
     self._runtime_params.append(param)
 
-  def get_device_interface(self):
+  def get_device_interface(self) -> str:
+    """Get the configured device interface name"""
     return self._config.get(NETWORK_KEY, {}).get(DEVICE_INTF_KEY)
 
   def get_device_interface_mac_addr(self):
     iface = self.get_device_interface()
     return IPControl.get_iface_mac_address(iface=iface)
 
-  def get_internet_interface(self):
+  def get_internet_interface(self) -> str:
     return self._config.get(NETWORK_KEY, {}).get(INTERNET_INTF_KEY)
 
-  def get_monitor_period(self):
+  def get_monitor_period(self) -> int:
     return self._config.get(MONITOR_PERIOD_KEY)
 
-  def get_startup_timeout(self):
+  def get_startup_timeout(self) -> int:
     return self._config.get(STARTUP_TIMEOUT_KEY)
 
-  def get_api_url(self):
+  def get_api_url(self) -> str:
     return self._config.get(API_URL_KEY)
 
   def get_api_port(self):
@@ -402,6 +417,7 @@ class TestrunSession():
     return {'total': self.get_total_tests(), 'results': test_results}
 
   def add_test_result(self, result):
+    """Adds or updates a test result into the session"""
 
     updated = False
 
@@ -451,15 +467,16 @@ class TestrunSession():
       self._results.append(result)
 
   def set_test_result_error(self, result):
-    """Set test result error"""
     result.result = TestResult.ERROR
     result.recommendations = None
     self._results.append(result)
 
   def add_module_report(self, module_report):
+    """Add a test module report to the session"""
     self._module_reports.append(module_report)
 
   def get_all_reports(self):
+    """Fetch all reports for all devices"""
 
     reports = []
 
@@ -470,15 +487,19 @@ class TestrunSession():
     return sorted(reports, key=lambda report: report['started'], reverse=True)
 
   def add_total_tests(self, no_tests):
+    """Increment the total number of tests executed"""
     self._total_tests += no_tests
 
-  def get_total_tests(self):
+  def get_total_tests(self) -> int:
+    """Returns the total number of tests executed"""
     return self._total_tests
 
-  def get_report_url(self):
+  def get_report_url(self) -> str:
+    """Fetch the finished report URL if the test attempt is finished"""
     return self._report_url
 
   def set_report_url(self, url):
+    """Set the URL for the test report download"""
     self._report_url = url
 
   def set_subnets(self, ipv4_subnet, ipv6_subnet):
@@ -548,21 +569,6 @@ class TestrunSession():
           # Instantiate a new risk profile
           risk_profile: RiskProfile = RiskProfile()
 
-          questions: list[dict] = json_data.get('questions')
-
-          # Remove any additional (outdated questions from the profile)
-          for question in questions:
-
-            # Check if question exists in the profile format
-            if self.get_profile_format_question(
-              question=question.get('question')) is None:
-
-              # Remove question from profile
-              questions.remove(question)
-
-          # Pass questions back to the risk profile
-          json_data['questions'] = questions
-
           # Pass JSON to populate risk profile
           risk_profile.load(profile_json=json_data,
                             profile_format=self._profile_format)
@@ -575,26 +581,22 @@ class TestrunSession():
       LOGGER.debug(e)
 
   def get_profiles_format(self):
+    """Get the current format for the profile questionnaire"""
     return self._profile_format_json
 
   def get_profiles(self):
+    """Fetch all loaded device risk profiles"""
     return self._profiles
 
   def get_profile(self, name):
+    """Get a risk profile by name"""
     for profile in self._profiles:
       if profile.name.lower() == name.lower():
         return profile
     return None
 
-  def _get_profile_question(self, profile_json, question):
-
-    for q in profile_json.get('questions'):
-      if question.lower() == q.get('question').lower():
-        return q
-
-    return None
-
   def get_profile_format_question(self, question):
+    """Obtain a question object from the risk profile format"""
     for q in self.get_profiles_format():
       if q.get('question') == question:
         return q
@@ -639,7 +641,7 @@ class TestrunSession():
     return risk_profile
 
   def validate_profile_json(self, profile_json):
-    """Validate properties in profile update requests"""
+    """Validate properties in profile update request"""
 
     # Get the status field
     valid = False
@@ -758,6 +760,7 @@ question {question.get('question')}''')
       return False
 
   def reset(self):
+    """Reset the Testrun session to defaults"""
     self.set_status(TestrunStatus.IDLE)
     self.set_description(None)
     self.set_target_device(None)
@@ -770,6 +773,7 @@ question {question.get('question')}''')
     self._ifaces = IPControl.get_sys_interfaces()
 
   def to_json(self):
+    """Return the current session in JSON format"""
 
     results = {
         'total': self.get_total_tests(),
@@ -789,18 +793,22 @@ question {question.get('question')}''')
         'tests': results
     }
 
+    # Append the report URL if it is present
     if self._report_url is not None:
       session_json['report'] = self.get_report_url()
 
+    # Append the test description if it is present
     if self._description is not None:
       session_json['description'] = self._description
 
     return session_json
 
   def get_timezone(self):
+    """Return the timezone of the host PC"""
     return self._timezone
 
   def upload_cert(self, filename, content):
+    """Upload a device root certificate to disk"""
 
     now = datetime.datetime.now(pytz.utc)
 
@@ -840,6 +848,7 @@ question {question.get('question')}''')
     return cert_obj
 
   def check_cert_file_name(self, name):
+    """Check certificate file name for duplicates"""
 
     # Check for duplicate file name
     if os.path.exists(os.path.join(CERTS_PATH, name)):
@@ -848,6 +857,7 @@ question {question.get('question')}''')
     return True
 
   def load_certs(self):
+    """Load device root certificates from disk"""
 
     LOGGER.debug(f'Loading certificates from {CERTS_PATH}')
 
@@ -901,6 +911,7 @@ question {question.get('question')}''')
         LOGGER.debug(e)
 
   def delete_cert(self, filename):
+    """Delete a root certificate from disk"""
 
     LOGGER.debug(f'Deleting certificate {filename}')
 
@@ -922,6 +933,7 @@ question {question.get('question')}''')
       return False
 
   def get_certs(self):
+    """Fetch all loaded root CA certificates"""
     return self._certs
 
   def detect_network_adapters_change(self) -> dict:

@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""IP Control Module"""
+"""IP control module"""
 import psutil
 import typing as t
 from common import logger
@@ -23,7 +23,7 @@ LOGGER = logger.get_logger('ip_ctrl')
 
 
 class IPControl:
-  """IP Control"""
+  """IP control"""
 
   def __init__(self):
     """Initialize the IPControl object"""

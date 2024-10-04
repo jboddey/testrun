@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Wrapper for the Testrun that simplifies
+"""
+Wrapper for Testrun that simplifies
 virtual testing procedure by allowing direct calling
 from the command line.
 
 Run using the provided command scripts in the cmd folder.
-E.g sudo cmd/start
+E.g sudo cmd/start or sudo testrun
 """
 
 import argparse
@@ -30,7 +31,7 @@ LOGGER = logger.get_logger("runner")
 
 
 class TestRunner:
-  """Controls and starts the Test Run application."""
+  """Controls and starts the Testrun application."""
 
   def __init__(self,
                config_file=None,
@@ -64,7 +65,6 @@ class TestRunner:
   def stop(self):
     self._testrun.stop()
 
-
 def parse_args():
   parser = argparse.ArgumentParser(
       description="Testrun",
@@ -73,7 +73,7 @@ def parse_args():
       "-f",
       "--config-file",
       default=None,
-      help="Define the configuration file for Testrun and Network Orchestrator"
+      help="Define the configuration file for Testrun"
   )
   parser.add_argument(
       "--validate",
@@ -86,7 +86,7 @@ def parse_args():
                       help="Run the network only, do not run tests")
   parser.add_argument("--single-intf",
                       action="store_true",
-                      help="Single interface mode (experimental)")
+                      help="Single interface mode")
   parser.add_argument("--no-ui",
                       default=False,
                       action="store_true",

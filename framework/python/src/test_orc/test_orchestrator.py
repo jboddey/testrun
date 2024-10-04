@@ -57,24 +57,22 @@ class TestOrchestrator:
     self._test_modules: List[TestModule] = []
     self._test_packs: List[TestPack] = []
 
-    self._container_logs = []
+    self._container_logs: list = []
     self._session = session
 
     self._api_url = (self.get_session().get_api_url() + ":" +
                      str(self.get_session().get_api_port()))
 
     self._net_orc = net_orc
-    self._test_in_progress = False
+    self._test_in_progress: bool = False
 
     self._root_path = os.path.dirname(
         os.path.dirname(
             os.path.dirname(
                 os.path.dirname(os.path.dirname(os.path.realpath(__file__))))))
-    self._test_modules_running = []
-    self._current_module = 0
 
-    self._test_modules_running = []
-    self._current_module = 0
+    self._test_modules_running: list = []
+    self._current_module: int = 0
 
   def start(self):
     LOGGER.debug("Starting test orchestrator")
@@ -87,11 +85,12 @@ class TestOrchestrator:
     # Setup the root_certs folder
     os.makedirs(DEVICE_ROOT_CERTS, exist_ok=True)
 
+    # Load test modules and test packs
     self._load_test_modules()
     self._load_test_packs()
 
   def stop(self):
-    """Stop any running tests"""
+    """Stop any running test modules"""
     self._stop_modules()
 
   def run_test_modules(self):
@@ -101,7 +100,9 @@ class TestOrchestrator:
     if self.get_session().get_status() != TestrunStatus.IN_PROGRESS:
       return
 
+    # Obtain target device from session
     device = self.get_session().get_target_device()
+
     test_pack_name = device.test_pack
     test_pack = self.get_test_pack(test_pack_name)
     LOGGER.debug("Using test pack " + test_pack.name)
@@ -166,18 +167,30 @@ class TestOrchestrator:
     if self.get_session().get_status() != TestrunStatus.IN_PROGRESS:
       return TestrunStatus.CANCELLED
 
+    # Create a new test report
     report = TestReport()
 
+    # Generate report content from session
     generated_report_json = self._generate_report()
+
+    # Pass generated report into test report object
     report.from_json(generated_report_json)
+
+    # Add module reports from session into test report
     report.add_module_reports(self.get_session().get_module_reports())
+
+    # Add test report to device object
     device.add_report(report)
 
+    # Write reports to disk
     self._write_reports(report)
+
     self._test_in_progress = False
+
+    # Update report URL now it has been created
     self.get_session().set_report_url(report.get_report_url())
 
-    # Set testing description
+    # Set testing description to display in UI
     test_pack: TestPack = self.get_test_pack(device.test_pack)
 
     # Default message is empty (better than an error message).
@@ -188,6 +201,7 @@ class TestOrchestrator:
     elif report.get_status() == TestrunStatus.NON_COMPLIANT:
       message = test_pack.get_message("non_compliant_description")
 
+    # Pass test description to the session
     self.get_session().set_description(message)
 
     # Move testing output from runtime to local device folder
@@ -198,6 +212,7 @@ class TestOrchestrator:
 
     LOGGER.debug("Old test results cleaned")
 
+    # Return the test status
     return report.get_status()
 
   def _write_reports(self, test_report):
@@ -222,19 +237,29 @@ class TestOrchestrator:
 
     util.run_command(f"chown -R {self._host_user} {out_dir}")
 
-  def _generate_report(self):
+  def _generate_report(self) -> dict:
 
     report = {}
+
+    # Add version of Testrun used
     report["testrun"] = {"version": self.get_session().get_version()}
 
-    report["mac_addr"] = self.get_session().get_target_device().mac_addr
+    # Add device under test information
     report["device"] = self.get_session().get_target_device().to_dict()
+
+    # Obtain start and end test time
     report["started"] = self.get_session().get_started().strftime(
         "%Y-%m-%d %H:%M:%S")
     report["finished"] = self.get_session().get_finished().strftime(
         "%Y-%m-%d %H:%M:%S")
+
+    # Calculate overall test result
     report["status"] = self._calculate_result()
+
+    # Add test result
     report["tests"] = self.get_session().get_report_tests()
+
+    # Generate report URL
     report["report"] = (
         self._api_url + "/" + SAVED_DEVICE_REPORTS.replace(
             "{device_folder}",
@@ -244,7 +269,11 @@ class TestOrchestrator:
     return report
 
   def _calculate_result(self):
+
+    # Default result is Compliant
     result = TestResult.COMPLIANT
+
+    # Check every test result
     for test_result in self.get_session().get_test_results():
 
       # Check Required tests
@@ -640,6 +669,7 @@ class TestOrchestrator:
       module_conf_file = os.path.join(self._root_path, modules_dir, module_dir,
                                       MODULE_CONFIG)
 
+      # Construct TestModule object from configuration file
       module = TestModule(module_conf_file, self.get_session(), extra_hosts)
       if module.depends_on is not None:
         self._load_test_module(module.depends_on)
@@ -648,9 +678,11 @@ class TestOrchestrator:
       return module
 
   def get_test_packs(self) -> List[TestPack]:
+    """Get all test packs"""
     return self._test_packs
 
   def get_test_pack(self, name: str) -> TestPack:
+    """Get a test pack by name"""
     for test_pack in self._test_packs:
       if test_pack.name.lower() == name.lower():
         return test_pack
@@ -670,15 +702,18 @@ class TestOrchestrator:
     module.stop(kill=kill)
 
   def get_test_modules(self):
+    """Get all test modules"""
     return self._test_modules
 
   def get_test_module(self, name):
+    """Get a test module by name"""
     for test_module in self.get_test_modules():
       if test_module.name == name:
         return test_module
     return None
 
   def get_test_cases(self):
+    """Fetch all test cases from all modules"""
     test_cases = []
     for test_module in self.get_test_modules():
       for test_case in test_module.tests:
@@ -686,12 +721,14 @@ class TestOrchestrator:
     return test_cases
 
   def get_test_case(self, name):
+    """Get a test case by test name"""
     for test_case in self.get_test_cases():
-      if test_case.name == name:
+      if test_case.name.lower() == name.lower():
         return test_case
     return None
 
   def get_session(self):
+    """Obtain the Testrun session"""
     return self._session
 
   def _set_test_modules_error(self, current_test):

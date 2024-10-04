@@ -12,7 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""The overall control of the Testrun application.
+"""
+The overall control of the Testrun application.
 This file provides the integration between all of the
 Testrun components, such as net_orc, test_orc and test_ui.
 """
