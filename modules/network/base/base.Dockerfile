@@ -15,7 +15,7 @@
 # Image name: testrun/base
 FROM ubuntu@sha256:77d57fd89366f7d16615794a5b53e124d742404e20f035c22032233f1826bd6a
 
-RUN apt-get update
+RUN apt-get update -y
 
 ARG MODULE_NAME=base
 ARG MODULE_DIR=modules/network/$MODULE_NAME
