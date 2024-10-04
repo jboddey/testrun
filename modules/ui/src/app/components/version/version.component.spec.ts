@@ -26,8 +26,8 @@ import { Version } from '../../model/version';
 import { NEW_VERSION, VERSION } from '../../mocks/version.mock';
 import { of } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
-import { DeviceFormComponent } from '../../pages/devices/components/device-form/device-form.component';
 import { ConsentDialogComponent } from './consent-dialog/consent-dialog.component';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 
 describe('VersionComponent', () => {
   let component: VersionComponent;
@@ -43,7 +43,7 @@ describe('VersionComponent', () => {
     mockService = jasmine.createSpyObj(['getVersion', 'fetchVersion']);
     mockService.getVersion.and.returnValue(versionBehaviorSubject$);
     TestBed.configureTestingModule({
-      imports: [VersionComponent],
+      imports: [VersionComponent, MatIconTestingModule],
       providers: [{ provide: TestRunService, useValue: mockService }],
     });
     fixture = TestBed.createComponent(VersionComponent);
@@ -56,24 +56,24 @@ describe('VersionComponent', () => {
   });
 
   it('should get correct aria label for version button', () => {
-    const labelUnavailableVersion = component.getVersionButtonLabel(
-      UNAVAILABLE_VERSION.installed_version
-    );
+    const labelUnavailableVersion =
+      component.getVersionButtonLabel(UNAVAILABLE_VERSION);
 
-    const labelAvailableVersion = component.getVersionButtonLabel(
-      VERSION.installed_version
-    );
+    const labelAvailableVersion = component.getVersionButtonLabel(NEW_VERSION);
+
+    const labelVersion = component.getVersionButtonLabel(VERSION);
 
     expect(labelUnavailableVersion).toContain(
       'Version temporarily unavailable.'
     );
     expect(labelAvailableVersion).toContain('New version is available.');
+    expect(labelVersion).toEqual('v1. Click to open the Welcome modal');
   });
 
   it('should open consent window on start', () => {
     const openSpy = spyOn(component.dialog, 'open').and.returnValue({
       afterClosed: () => of(true),
-    } as MatDialogRef<typeof DeviceFormComponent>);
+    } as MatDialogRef<typeof ConsentDialogComponent>);
     versionBehaviorSubject$.next(VERSION);
     mockService.getVersion.and.returnValue(versionBehaviorSubject$);
     fixture.detectChanges();

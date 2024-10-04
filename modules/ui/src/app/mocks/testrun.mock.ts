@@ -19,6 +19,7 @@ import {
   TestrunStatus,
   TestsData,
 } from '../model/testrun-status';
+import { DeviceStatus } from '../model/device';
 
 export const TEST_DATA_RESULT: IResult[] = [
   {
@@ -31,6 +32,11 @@ export const TEST_DATA_RESULT: IResult[] = [
     description:
       'The device should use the DNS server provided by the DHCP server',
     result: 'Non-Compliant',
+  },
+  {
+    name: 'dns.mdns',
+    description: 'Does the device has MDNS (or any kind of IP multicast)',
+    result: 'Not Started',
   },
 ];
 
@@ -49,7 +55,7 @@ export const TEST_DATA_RESULT_WITH_RECOMMENDATIONS: IResult[] = [
 
 export const TEST_DATA_TABLE_RESULT: IResult[] = [
   ...TEST_DATA_RESULT,
-  ...new Array(24).fill(null).map(() => ({}) as IResult),
+  ...new Array(23).fill(null).map(() => ({}) as IResult),
 ];
 
 export const EMPTY_RESULT = new Array(100)
@@ -71,6 +77,7 @@ const PROGRESS_DATA_RESPONSE = (
     status,
     mac_addr: '01:02:03:04:05:06',
     device: {
+      status: DeviceStatus.VALID,
       manufacturer: 'Delta',
       model: '03-DIN-CPU',
       mac_addr: '01:02:03:04:05:06',
@@ -80,6 +87,7 @@ const PROGRESS_DATA_RESPONSE = (
     finished,
     tests,
     report,
+    tags: ['VSA', 'Other tag', 'And one more'],
   };
 };
 
