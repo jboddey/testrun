@@ -2,6 +2,7 @@
 netifaces==0.11.0
 BAC0==23.7.3
 pytz==2024.1
+bacpypes==0.18.7
 
 # Required for Modbus protocol tests
 pymodbus==3.7.0
