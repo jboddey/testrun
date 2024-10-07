@@ -16,10 +16,10 @@ limitations under the License.
 <section class="testrun-logo"></section>
 <section class="content-container">
   <section class="consent-main-content">
-    <h2>Welcome to Testrun!</h2>
+    <h2>Welcome!</h2>
     <p>
-      The application is ready to run the testing process for your devices. Here
-      is a list of links you could find valuable:
+      Testrun is ready to test your devices against industry cyber security
+      standards. See below for a list of links you may find useful:
     </p>
     <ul>
       <li>
@@ -29,7 +29,7 @@ limitations under the License.
           class="message-link"
           >FAQ page</a
         >
-        on github
+        on GitHub
       </li>
       <li>
         To file a bug go to
@@ -37,7 +37,7 @@ limitations under the License.
           href="https://github.com/google/testrun/issues/new/choose"
           target="_blank"
           class="message-link"
-          >github issues</a
+          >GitHub issues</a
         >
       </li>
       <li>
@@ -57,15 +57,11 @@ limitations under the License.
     class="section-container"
     *ngIf="data.version.update_available === true">
     <app-callout [type]="CalloutType.Warning">
-      <span class="section-title">Software is outdated!</span>
+      <span class="section-title">New version available</span>
       <p class="section-content consent">
-        You are currently using an outdated software (<b>{{
-          data.version.installed_version
-        }}</b
-        >).
-        <br />
-        The latest version number is <b>{{ data.version.latest_version }}</b
-        >. Please consider to update or continue at your own risk.
+        A new version of Testrun is available
+        <span>({{ data.version.latest_version }})</span>
+        <br />Please update to the latest version.
       </p>
       <p class="section-action-container">
         <a
@@ -85,8 +81,8 @@ limitations under the License.
     <app-callout [type]="CalloutType.InfoPilot">
       <span class="section-title">Pilot Assessment</span>
       <p class="section-content">
-        Pilot project support is now offered through Testrun. Follow the
-        instructions set out to get your pilot recommendation.
+        Testrun can now assess your device against the BOS Pilot Program
+        requirements. When configuring your device, choose 'Pilot Assessment'.
       </p>
     </app-callout>
   </section>

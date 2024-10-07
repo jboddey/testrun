@@ -217,8 +217,8 @@ limitations under the License.
                     emptyMessage;
                     context: {
                       header:
-                        'Sorry, there are no reports matching the search criteria.',
-                      message: 'Please consider change or clear filters.',
+                        'There are no reports matching the search criteria.',
+                      message: 'Please change or clear the selected filters.',
                     }
                   "></ng-container>
               </div>
@@ -245,7 +245,7 @@ limitations under the License.
       *ngTemplateOutlet="
         emptyMessage;
         context: {
-          header: 'Sorry, there are no reports yet!',
+          header: 'No reports could be found',
           message:
             'Reports will automatically generate following a test attempt completion.',
         }

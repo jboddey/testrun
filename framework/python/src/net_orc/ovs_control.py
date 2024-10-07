@@ -11,9 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""OVS Control Module"""
-from common import logger
-from common import util
+"""OVS control module"""
+from common import logger, util
 
 DEVICE_BRIDGE = 'tr-d'
 INTERNET_BRIDGE = 'tr-c'
@@ -23,62 +22,66 @@ UNKNOWN_ARP_COOKIE = '1183'
 CONTAINER_MAC_PREFIX = '9a:02:57:1e:8f'
 
 class OVSControl:
-  """OVS Control"""
+  """OVS control"""
 
   def __init__(self, session):
     self._session = session
 
   def add_bridge(self, bridge_name):
+    """
+    Create the bridge using ovs-vsctl commands.
+    Uses the --may-exist option to prevent failures
+    if this bridge already exists by this name it won't fail
+    and will not modify the existing bridge.
+    """
     LOGGER.debug('Adding OVS bridge: ' + bridge_name)
-    # Create the bridge using ovs-vsctl commands
-    # Uses the --may-exist option to prevent failures
-    # if this bridge already exists by this name it won't fail
-    # and will not modify the existing bridge
     success = util.run_command('ovs-vsctl --may-exist add-br ' + bridge_name)
     return success
 
   def add_flow(self, bridge_name, flow):
-    # Add a flow to the bridge using ovs-ofctl commands
+    """Add a flow to the bridge using ovs-ofctl commands"""
     LOGGER.debug(f'Adding flow {flow} to bridge: {bridge_name}')
     success = util.run_command(f'ovs-ofctl add-flow {bridge_name} \'{flow}\'')
     return success
 
   def add_port(self, port, bridge_name):
+    """
+    Add a port to the bridge using ovs-vsctl commands
+    Uses the --may-exist option to prevent failures
+    if this port already exists on the bridge and will not
+    modify the existing bridge.
+    """
     LOGGER.debug('Adding port ' + port + ' to OVS bridge: ' + bridge_name)
-    # Add a port to the bridge using ovs-vsctl commands
-    # Uses the --may-exist option to prevent failures
-    # if this port already exists on the bridge and will not
-    # modify the existing bridge
     success = util.run_command(f"""ovs-vsctl --may-exist
                              add-port {bridge_name} {port}""")
     return success
 
   def delete_flow(self, bridge_name, flow):
-    # Delete a flow from the bridge using ovs-ofctl commands
+    """Delete a flow from the bridge using ovs-ofctl commands"""
     LOGGER.debug(f'Deleting flow {flow} from bridge: {bridge_name}')
     success = util.run_command(f'ovs-ofctl del-flows {bridge_name} \'{flow}\'')
     return success
 
   def get_bridge_ports(self, bridge_name):
-    # Get a list of all the ports on a bridge
+    """Get a list of all the ports on a bridge"""
     response = util.run_command(f'ovs-vsctl list-ports {bridge_name}',
                                 output=True)
     return response[0].splitlines()
 
   def bridge_exists(self, bridge_name):
-    # Check if a bridge exists by the name provided
+    """Check if a bridge exists by the name provided"""
     LOGGER.debug(f'Checking if {bridge_name} exists')
     success = util.run_command(f'ovs-vsctl br-exists {bridge_name}')
     return success
 
   def port_exists(self, bridge_name, port):
-    # Check if a port exists on a specified bridge
+    """Check if a port exists on a specified bridge"""
     LOGGER.debug(f'Checking if {bridge_name} exists')
     resp = util.run_command(f'ovs-vsctl port-to-br {port}', True)
     return resp[0] == bridge_name
 
   def validate_baseline_network(self):
-    # Verify the OVS setup of the virtual network
+    """Verify the OVS setup of the virtual network"""
     LOGGER.debug('Validating baseline network')
 
     dev_bridge = True
@@ -99,6 +102,7 @@ class OVSControl:
 
   def verify_bridge(self, bridge_name, ports):
     LOGGER.debug('Verifying bridge: ' + bridge_name)
+
     verified = True
     if self.bridge_exists(bridge_name):
       bridge_ports = self.get_bridge_ports(bridge_name)
@@ -204,10 +208,12 @@ class OVSControl:
                      flow=f'cookie={UNKNOWN_ARP_COOKIE}/-1')
 
   def delete_bridge(self, bridge_name):
+    """
+    Delete the bridge using ovs-vsctl commands
+    Uses the --if-exists option to prevent failures
+    if this bridge does not exists.
+    """
     LOGGER.debug('Deleting OVS Bridge: ' + bridge_name)
-    # Delete the bridge using ovs-vsctl commands
-    # Uses the --if-exists option to prevent failures
-    # if this bridge does not exists
     success = util.run_command('ovs-vsctl --if-exists del-br ' + bridge_name)
     return success
 

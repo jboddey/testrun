@@ -115,6 +115,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.settingsStore.getSystemConfig();
     this.setDefaultFormValues();
   }
+
   closeSetting(message: string): void {
     this.resetForm();
     this.closeSettingEvent.emit();

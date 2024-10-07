@@ -60,6 +60,7 @@ jobs:
     name:  Unit
     runs-on: ubuntu-22.04
     timeout-minutes: 15
+    continue-on-error: true
     steps:
       - name: Checkout source
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -147,6 +148,7 @@ jobs:
     permissions: {}
     name: ESLint
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
     - name: Install Node

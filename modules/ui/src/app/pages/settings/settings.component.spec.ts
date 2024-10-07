@@ -268,12 +268,6 @@ describe('GeneralSettingsComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should have callout component', () => {
-      const callout = compiled.querySelector('app-callout');
-
-      expect(callout).toBeTruthy();
-    });
-
     it('should have disabled "Save" button', () => {
       const saveBtn = compiled.querySelector(
         '.save-button'
@@ -297,12 +291,6 @@ describe('GeneralSettingsComponent', () => {
         monitoringPeriodOptions: {},
       });
       fixture.detectChanges();
-    });
-
-    it('should have callout component', () => {
-      const callout = compiled.querySelector('app-callout');
-
-      expect(callout).toBeTruthy();
     });
 
     it('should have disabled "Save" button', () => {

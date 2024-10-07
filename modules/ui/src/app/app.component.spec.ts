@@ -528,15 +528,15 @@ describe('AppComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should have callout component with "Step 3" text', () => {
+      it('should have callout component with "Configuration is complete" text', () => {
         const callout = compiled.querySelector('app-callout');
         const calloutContent = callout?.innerHTML.trim();
 
         expect(callout).toBeTruthy();
-        expect(calloutContent).toContain('Step 3');
+        expect(calloutContent).toContain('Configuration is complete');
       });
 
-      it('should NOT have callout component with "Step 3" if has reports', () => {
+      it('should NOT have callout component with "Configuration is complete" if has reports', () => {
         store.overrideSelector(selectReports, [...HISTORY]);
         store.refreshState();
         fixture.detectChanges();
@@ -559,12 +559,12 @@ describe('AppComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should have callout component with "The device is now being tested" text', () => {
+      it('should have callout component with "Your device is now being tested" text', () => {
         const callout = compiled.querySelector('app-callout');
         const calloutContent = callout?.innerHTML.trim();
 
         expect(callout).toBeTruthy();
-        expect(calloutContent).toContain('The device is now being tested');
+        expect(calloutContent).toContain('Your device is now being tested');
       });
 
       it('should have callout component with "Risk Assessment" link', () => {
@@ -596,7 +596,7 @@ describe('AppComponent', () => {
         const calloutContent = callout?.innerHTML.trim();
 
         expect(callout).toBeTruthy();
-        expect(calloutContent).toContain('The device is now being tested');
+        expect(calloutContent).toContain('Your device is now being tested');
       });
 
       it('should have callout component with "Risk Assessment" link', () => {
@@ -679,12 +679,12 @@ describe('AppComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should have callout component with "Step 3" text', () => {
+      it('should have callout component with "Configuration is complete" text', () => {
         const callout = compiled.querySelector('app-callout');
         const calloutContent = callout?.innerHTML.trim();
 
         expect(callout).toBeTruthy();
-        expect(calloutContent).toContain('Step 3');
+        expect(calloutContent).toContain('Configuration is complete');
       });
 
       it('should have callout component with "testing" link', () => {
@@ -743,7 +743,7 @@ describe('AppComponent', () => {
     });
 
     describe('error', () => {
-      describe('with settingMissedError with one port is missed', () => {
+      describe('with settingMissedError with one port missing', () => {
         beforeEach(() => {
           store.overrideSelector(selectError, {
             isSettingMissed: true,
@@ -758,11 +758,13 @@ describe('AppComponent', () => {
           const calloutContent = callout?.innerHTML.trim();
 
           expect(callout).toBeTruthy();
-          expect(calloutContent).toContain('Selected port is missing!');
+          expect(calloutContent).toContain(
+            'One of your configured ports are missing'
+          );
         });
       });
 
-      describe('with settingMissedError with two ports are missed', () => {
+      describe('with settingMissedError with two ports missing', () => {
         beforeEach(() => {
           store.overrideSelector(selectError, {
             isSettingMissed: true,
@@ -777,7 +779,7 @@ describe('AppComponent', () => {
           const calloutContent = callout?.innerHTML.trim();
 
           expect(callout).toBeTruthy();
-          expect(calloutContent).toContain('No ports detected.');
+          expect(calloutContent).toContain('No ports have been detected');
         });
       });
 
@@ -809,7 +811,7 @@ describe('AppComponent', () => {
             callout?.innerHTML
               .trim()
               .includes(
-                'Further information is required in your device configurations.'
+                'One or more of your devices requires further configuration'
               )
           ) {
             hasExpiredDeviceCallout = true;

@@ -55,20 +55,20 @@ export const LOG_LEVELS = {
   INFO: 'Normal events and issues',
   WARNING: 'Warnings, errors, critical issues',
   ERROR: 'Errors and critical problems',
-  CRITICAL: 'Critical problems',
+  CRITICAL: 'Critical problems only',
 };
 
 export const MONITORING_PERIOD = {
-  30: 'Extremely fast device',
+  30: 'Recommended for debugging only',
   60: '',
   120: '',
   240: '',
-  300: 'Optimal',
+  300: 'Recommended monitoring time',
   360: '',
   420: '',
   480: '',
   560: '',
-  600: 'Very slow device',
+  600: 'Devices with long boot times',
 };
 @Injectable()
 export class SettingsStore extends ComponentStore<SettingsComponentState> {

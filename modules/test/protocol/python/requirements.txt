@@ -1,6 +1,6 @@
 # Required for BACnet protocol tests
 netifaces==0.11.0
-BAC0==23.7.3
+BAC0==2024.9.20
 pytz==2024.1
 
 # Required for Modbus protocol tests

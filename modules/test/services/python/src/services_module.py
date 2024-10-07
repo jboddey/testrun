@@ -27,7 +27,7 @@ LOGGER = None
 
 
 class ServicesModule(TestModule):
-  """Services Test module"""
+  """Services test module"""
 
   def __init__(self,
                module,

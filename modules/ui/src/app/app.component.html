@@ -134,11 +134,12 @@ limitations under the License.
                   error.devicePortMissed && error.internetPortMissed;
                   else onePortMissed
                 ">
-                No ports detected. Please connect and configure network and
-                device connections in the
+                No ports have been detected. Please connect and configure
+                internet and device connections in
               </ng-container>
               <ng-template #onePortMissed>
-                Selected port is missing! Please define a valid one using
+                One of your configured ports are missing. Please update the port
+                in
               </ng-template>
               <a
                 (click)="openSetting(isTestrunInProgress(vm.systemStatus))"
@@ -154,7 +155,6 @@ limitations under the License.
                 class="message-link"
                 >System settings</a
               >
-              panel.
             </app-callout>
           </ng-container>
           <app-callout
@@ -168,7 +168,7 @@ limitations under the License.
               vm.hasExpiredDevices &&
               !vm.calloutState.get('outdated_devices_callout')
             ">
-            Further information is required in your device configurations.
+            One or more of your devices requires further configuration.
             <ng-container *ngIf="!isDevicesRoute"
               >Please update your
               <a
@@ -179,7 +179,7 @@ limitations under the License.
                 tabindex="0"
                 role="link"
                 class="message-link"
-                >Devices</a
+                >devices</a
               >
               to continue testing.
             </ng-container>
@@ -235,7 +235,7 @@ limitations under the License.
               !vm.reports.length &&
               !vm.isAllDevicesOutdated
             ">
-            Step 3: Once device is created, you are able to
+            Configuration is complete. You can now
             <a
               (click)="navigateToRuntime()"
               (keydown.enter)="navigateToRuntime()"
@@ -258,7 +258,7 @@ limitations under the License.
               vm.systemStatus === StatusOfTestrun.InProgress &&
               isRiskAssessmentRoute === false
             ">
-            The device is now being tested. Why not take the time to complete
+            Your device is now being tested. Why not take the time to complete
             the device
             <a
               #riskAssessmentLink

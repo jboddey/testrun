@@ -75,18 +75,46 @@ class RiskProfile():
     self._validate(profile_json, profile_format)
     self.update_risk(profile_format)
 
-  # Load a profile without modifying the created date
-  # but still validate the profile
   def load(self, profile_json, profile_format):
+    """Load an existing risk profile from JSON"""
+
+    # Extract the profile name
     self.name = profile_json['name']
+
+    # Extract profile created datetime
     self.created = datetime.strptime(
       profile_json['created'], '%Y-%m-%d')
+
+    # Extract the Testrun version
     self.version = profile_json['version']
-    self.questions = profile_json['questions']
+
+    # Extract the questions and answers
+    questions: list[dict] = profile_json.get('questions')
+
+    # Remove any additional (outdated questions from the profile)
+    for question in questions:
+
+      # Check if question exists in the profile format
+      if self._get_format_question(
+        question=question.get('question'),
+        profile_format=profile_format) is None:
+
+        # Remove question from profile
+        questions.remove(question)
+
+    # Save questions and answers in risk profile
+    self.questions = questions
+
+    # Default status to None. This will be updated in update_risk
     self.status = None
+
+    # Save current profile format in the risk profile
     self._profile_format = profile_format
 
+    # Check whether profile is currently valid
     self._validate(profile_json, profile_format)
+
+    # Re-calculate the profile risk
     self.update_risk(profile_format)
 
     return self
@@ -290,6 +318,7 @@ class RiskProfile():
     return all_questions_answered and all_questions_present
 
   def _expired(self):
+
     # Calculate the date one year after the creation date
     expiry_date = self.created + relativedelta(years=1)
 

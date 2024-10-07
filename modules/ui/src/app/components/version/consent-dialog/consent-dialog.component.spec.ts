@@ -137,14 +137,8 @@ describe('ConsentDialogComponent', () => {
       ) as HTMLElement;
 
       const innerContent = content.innerHTML.trim();
-      expect(innerContent).toContain(
-        'You are currently using an outdated software'
-      );
-      expect(innerContent).toContain('v1');
-      expect(innerContent).toContain('v2');
-      expect(innerContent).toContain(
-        'Please consider to update or continue at your own risk.'
-      );
+      expect(innerContent).toContain('A new version of Testrun is available');
+      expect(innerContent).toContain('Please update to the latest version');
     });
   });
 

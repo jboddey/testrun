@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Intercepts network traffic between network services and the device
-under test."""
+"""
+Intercepts network traffic between network services
+and the device under test."""
 import threading
 from scapy.all import AsyncSniffer, DHCP, get_if_hwaddr
 from net_orc.network_event import NetworkEvent
@@ -53,6 +54,7 @@ class Listener:
     self._sniffer.start()
 
   def reset(self):
+    """Restore the listener back to defaults."""
     self._callbacks = []
     self._discovered_devices = []
 
@@ -70,6 +72,7 @@ class Listener:
     self._callbacks.append({'callback': callback, 'events': events})
 
   def call_callback(self, net_event, *args):
+    """Trigger any registered callback."""
     for callback in self._callbacks:
       if net_event in callback['events']:
         callback_thread = threading.Thread(target=callback['callback'],
