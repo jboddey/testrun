@@ -18,8 +18,8 @@ limitations under the License.
   <section class="consent-main-content">
     <h2>Welcome!</h2>
     <p>
-      Testrun is ready to test your devices against industry cyber security standards. See
-      below for a list of links you may find useful:
+      Testrun is ready to test your devices against industry cyber security
+      standards. See below for a list of links you may find useful:
     </p>
     <ul>
       <li>
@@ -59,9 +59,9 @@ limitations under the License.
     <app-callout [type]="CalloutType.Warning">
       <span class="section-title">New version available</span>
       <p class="section-content consent">
-        A newer software version is available {{ data.version.latest_version }}.
-        <br />You are currently using {{ data.version.installed_version }}
-        <br />Please update to the latest version
+        A new version of Testrun is available
+        <span>({{ data.version.latest_version }})</span>
+        <br />Please update to the latest version.
       </p>
       <p class="section-action-container">
         <a
@@ -81,8 +81,8 @@ limitations under the License.
     <app-callout [type]="CalloutType.InfoPilot">
       <span class="section-title">Pilot Assessment</span>
       <p class="section-content">
-        Testrun can now assess your device against the BOS Pilot Program requirements.
-        When configuring your device, choose 'Pilot Assessment'.
+        Testrun can now assess your device against the BOS Pilot Program
+        requirements. When configuring your device, choose 'Pilot Assessment'.
       </p>
     </app-callout>
   </section>

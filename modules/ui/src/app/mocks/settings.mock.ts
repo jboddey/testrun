@@ -58,7 +58,7 @@ export const MOCK_LOG_VALUE: SystemInterfaces = {
 
 export const MOCK_PERIOD_VALUE: SystemInterfaces = {
   key: '600',
-  value: 'Very slow device',
+  value: 'Devices with long boot times',
 };
 
 export const MOCK_ADAPTERS: Adapters = {

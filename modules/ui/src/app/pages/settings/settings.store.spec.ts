@@ -310,7 +310,7 @@ describe('SettingsStore', () => {
             (form.get(FormKey.MONITOR_PERIOD) as FormControl).value
           ).toEqual({
             key: '300',
-            value: 'Optimal',
+            value: 'Recommended monitoring time',
           });
         });
       });

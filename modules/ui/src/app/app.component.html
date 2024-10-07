@@ -134,11 +134,12 @@ limitations under the License.
                   error.devicePortMissed && error.internetPortMissed;
                   else onePortMissed
                 ">
-                No ports have been detected. Please connect and configure internet and
-                device connections in 
+                No ports have been detected. Please connect and configure
+                internet and device connections in
               </ng-container>
               <ng-template #onePortMissed>
-                One of your configured ports are missing. Please update the port in 
+                One of your configured ports are missing. Please update the port
+                in
               </ng-template>
               <a
                 (click)="openSetting(isTestrunInProgress(vm.systemStatus))"
@@ -234,7 +235,7 @@ limitations under the License.
               !vm.reports.length &&
               !vm.isAllDevicesOutdated
             ">
-            Configuration is complete. You can now 
+            Configuration is complete. You can now
             <a
               (click)="navigateToRuntime()"
               (keydown.enter)="navigateToRuntime()"

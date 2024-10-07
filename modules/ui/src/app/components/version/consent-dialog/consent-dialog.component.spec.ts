@@ -142,9 +142,7 @@ describe('ConsentDialogComponent', () => {
       );
       expect(innerContent).toContain('v1');
       expect(innerContent).toContain('v2');
-      expect(innerContent).toContain(
-        'Please consider to update or continue at your own risk.'
-      );
+      expect(innerContent).toContain('Please update to the latest version');
     });
   });
 
