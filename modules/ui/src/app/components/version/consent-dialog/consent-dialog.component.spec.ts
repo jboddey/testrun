@@ -137,9 +137,7 @@ describe('ConsentDialogComponent', () => {
       ) as HTMLElement;
 
       const innerContent = content.innerHTML.trim();
-      expect(innerContent).toContain(
-        'A new version of Testrun is available'
-      );
+      expect(innerContent).toContain('A new version of Testrun is available');
       expect(innerContent).toContain('Please update to the latest version');
     });
   });

@@ -779,9 +779,7 @@ describe('AppComponent', () => {
           const calloutContent = callout?.innerHTML.trim();
 
           expect(callout).toBeTruthy();
-          expect(calloutContent).toContain(
-            'No ports have been detected'
-          );
+          expect(calloutContent).toContain('No ports have been detected');
         });
       });
 
