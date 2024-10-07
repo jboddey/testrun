@@ -780,7 +780,7 @@ describe('AppComponent', () => {
 
           expect(callout).toBeTruthy();
           expect(calloutContent).toContain(
-            'One of your configured ports are missing'
+            'No ports have been detected'
           );
         });
       });

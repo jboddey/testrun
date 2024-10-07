@@ -26,7 +26,7 @@ export IFACE=veth0
 # Create a local user that matches the same as the host
 # to be used for correct file ownership for various logs
 # HOST_USER mapped in via docker container environemnt variables
-useradd $HOST_USER
+useradd $HOST_USER || true
 
 # Set permissions on the output files
 chown -R $HOST_USER $OUTPUT_DIR

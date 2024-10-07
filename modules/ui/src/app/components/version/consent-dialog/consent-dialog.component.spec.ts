@@ -138,7 +138,7 @@ describe('ConsentDialogComponent', () => {
 
       const innerContent = content.innerHTML.trim();
       expect(innerContent).toContain(
-        'You are currently using an outdated software'
+        'A new version of Testrun is available'
       );
       expect(innerContent).toContain('Please update to the latest version');
     });
