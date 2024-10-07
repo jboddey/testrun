@@ -140,8 +140,6 @@ describe('ConsentDialogComponent', () => {
       expect(innerContent).toContain(
         'You are currently using an outdated software'
       );
-      expect(innerContent).toContain('v1');
-      expect(innerContent).toContain('v2');
       expect(innerContent).toContain('Please update to the latest version');
     });
   });

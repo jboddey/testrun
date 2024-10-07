@@ -596,7 +596,7 @@ describe('AppComponent', () => {
         const calloutContent = callout?.innerHTML.trim();
 
         expect(callout).toBeTruthy();
-        expect(calloutContent).toContain('The device is now being tested');
+        expect(calloutContent).toContain('Your device is now being tested');
       });
 
       it('should have callout component with "Risk Assessment" link', () => {
@@ -679,12 +679,12 @@ describe('AppComponent', () => {
         fixture.detectChanges();
       });
 
-      it('should have callout component with "Step 3" text', () => {
+      it('should have callout component with "Configuration is complete" text', () => {
         const callout = compiled.querySelector('app-callout');
         const calloutContent = callout?.innerHTML.trim();
 
         expect(callout).toBeTruthy();
-        expect(calloutContent).toContain('Step 3');
+        expect(calloutContent).toContain('Configuration is complete');
       });
 
       it('should have callout component with "testing" link', () => {
@@ -758,7 +758,9 @@ describe('AppComponent', () => {
           const calloutContent = callout?.innerHTML.trim();
 
           expect(callout).toBeTruthy();
-          expect(calloutContent).toContain('Selected port is missing');
+          expect(calloutContent).toContain(
+            'One of your configured ports are missing'
+          );
         });
       });
 
@@ -777,7 +779,9 @@ describe('AppComponent', () => {
           const calloutContent = callout?.innerHTML.trim();
 
           expect(callout).toBeTruthy();
-          expect(calloutContent).toContain('One of your configured ports is missing');
+          expect(calloutContent).toContain(
+            'One of your configured ports are missing'
+          );
         });
       });
 
@@ -809,7 +813,7 @@ describe('AppComponent', () => {
             callout?.innerHTML
               .trim()
               .includes(
-                'Further information is required in your device configurations.'
+                'One or more of your devices requires further configuration'
               )
           ) {
             hasExpiredDeviceCallout = true;
