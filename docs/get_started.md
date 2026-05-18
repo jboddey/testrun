@@ -26,7 +26,7 @@ We recommend that you run Testrun on a stand-alone machine that has a fresh inst
 
 Before you start, ensure you have the following hardware:
 
--  PC running Ubuntu 22.04 or 24.04 LTS (laptop or desktop)
+-  PC running Ubuntu 22.04, 24.04 or 26.04 LTS (laptop or desktop)
 -  2x ethernet ports (USB ethernet adapters work too)
 -  Internet connection
 
