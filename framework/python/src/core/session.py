@@ -163,8 +163,8 @@ class TestrunSession():
     self.load_certs()
 
     # Fetch the timezone of the host system
-    tz = util.run_command('cat /etc/timezone')
-    # TODO: Check if timezone is fetched successfully
+    # /etc/timezone may not exist on all distros (e.g. Ubuntu 26+); fall back to timedatectl
+    tz = util.run_command('cat /etc/timezone 2>/dev/null || timedatectl show --property=Timezone --value')
     self._timezone = tz[0]
     LOGGER.debug(f'System timezone is {self._timezone}')
 
