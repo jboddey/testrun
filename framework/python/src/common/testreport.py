@@ -390,7 +390,7 @@ class TestReport():
 
   def _add_page_counter(self, html):
     # Add page nums and total page
-    soup = BeautifulSoup(html, features='html5lib')
+    soup = BeautifulSoup(html, features='html.parser')
     page_index_divs = soup.find_all('div', class_='page-index')
     total_pages = len(page_index_divs)
     for index, div in enumerate(page_index_divs):

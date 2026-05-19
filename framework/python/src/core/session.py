@@ -164,7 +164,9 @@ class TestrunSession():
 
     # Fetch the timezone of the host system
     # /etc/timezone may not exist on all distros (e.g. Ubuntu 26+); fall back to timedatectl
-    tz = util.run_command('cat /etc/timezone 2>/dev/null || timedatectl show --property=Timezone --value')
+    tz = util.run_command('cat /etc/timezone', supress_error=True)
+    if not tz[0]:
+      tz = util.run_command('timedatectl show --property=Timezone --value')
     self._timezone = tz[0]
     LOGGER.debug(f'System timezone is {self._timezone}')
 

@@ -15,5 +15,8 @@
 # Image name: testrun/build-ui
 FROM node:22 AS build
 
+# Update npm to latest
+RUN npm install -g npm@latest
+
 # Set the working directory
 WORKDIR /modules/ui
